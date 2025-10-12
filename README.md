@@ -50,7 +50,9 @@ ChatsGPT is a web-based AI chat application that allows users to interact with a
    ```bash
    git clone https://github.com/07Gautammishra/chatsgpt.git
    cd ChatsGPT/backend
-b
+
+### Setup .env file
+```js
 PORT=5000
 MONGO_URL=your_mongodb_uri
 JWT_SECRET=your_jwt_secret
@@ -58,8 +60,16 @@ IMAGEKIT_PUBLIC_KEY=your_imagekit_public_key
 IMAGEKIT_PRIVATE_KEY=your_imagekit_private_key
 IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/your_imagekit_id
 GEMINI_API_KEY=your_google_gemini_api_key
+```
+### Build the app
 
-Install dependencies:
+```shell
 npm run build
-Start the backend server:
-npm run start
+```
+
+### Start the app
+
+```shell
+npm start
+```
+
