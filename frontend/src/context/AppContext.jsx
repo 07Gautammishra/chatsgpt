@@ -5,7 +5,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const AppContext= createContext()
-axios.defaults.baseURL= "http://localhost:8000"
+axios.defaults.baseURL= process.env.HOST
 export const AppContextProvider=({children})=>{
     const navigate= useNavigate()
     const [user, setUser]= useState(null)
@@ -105,3 +105,4 @@ export const AppContextProvider=({children})=>{
 }
 
 export const useAppContext=()=>useContext(AppContext)
+
