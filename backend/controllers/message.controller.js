@@ -11,35 +11,30 @@ import { ENV } from "../configs/ENV.js"
 
 export const textMessageController = async (req, res) => {
     try {
-        const userId = req.user._id;
-        const { chatId, prompt } = req.body;
+        const userId = req.user._id
+        const { chatId, prompt } = req.body
 
-        const chat = await Chat.findOne({ userId, _id: chatId });
-        if (!chat) return res.status(404).json({ success: false, message: "Chat not found" });
-
-        // 1. Add user message to DB
-        const userMsg = { role: "user", content: prompt, timestamp: Date.now(), isImage: false };
-        chat.messages.push(userMsg);
-
-        // 2. Prepare history for AI (Gemini/OpenAI format)
-        const chatHistory = chat.messages.map(({ role, content }) => ({ role, content }));
-
-        const { choices } = await openai.chat.completions.create({
+        const chat = await Chat.findOne({userId, _id: chatId})
+        chat.messages.push({ role: "user", content: prompt, timestamp: Date.now(), isImage: false })
+        const {choices} = await openai.chat.completions.create({
             model: "gemini-2.0-flash",
-            messages: chatHistory,
+            messages: [
+                {
+                    role: "user",
+                    content: prompt,
+                },
+            ],
         });
-
-        // 3. Save Assistant reply
-        const reply = { ...choices[0].message, timestamp: Date.now(), isImage: false };
-        chat.messages.push(reply);
-        
-        await chat.save();
-        res.json({ success: true, reply });
+        const reply= {...choices[0].message, timestamp: Date.now(), isImage: false }
+        chat.messages.push(reply)
+        await chat.save()
+        res.json({success: true , reply})
     } catch (error) {
-        console.error("Text Controller Error:", error);
-        res.status(500).json({ success: false, message: "Failed to process text message" });
+        console.log("Error in textMessageController : ", error.message)
+        res.status(500).json({ success: false, message: error.message })
     }
-};
+}
+
 export const imageMessageController = async (req, res) => {
     try {
         const userId = req.user._id;
@@ -72,5 +67,4 @@ export const imageMessageController = async (req, res) => {
         
     }
     
-
 }
